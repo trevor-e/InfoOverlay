@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">InfoOverlay</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="pref_service_enabled">pref_service_enabled</string>
+    <string name="pref_service_enabled_service">Set the state of the service.</string>
+    <string name="pref_location">pref_location</string>
+    <string name="pref_location_summary">The location of the overlay text.</string>
+    <string name="pref_service_enabled_title">Status</string>
+    <string name="pref_location_title">Overlay location</string>
+    <string name="location_top_left">Top left</string>
+    <string name="location_top_right">Top right</string>
+    <string name="location_bottom_left">Bottom left</string>
+    <string name="location_bottom_right">Bottom right</string>
+    <string name="tag_preference_fragment">preference_fragment</string>
+
+</resources>

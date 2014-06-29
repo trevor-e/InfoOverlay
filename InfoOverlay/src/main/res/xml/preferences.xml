@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:key="@string/pref_service_enabled"
+        android:title="@string/pref_service_enabled_title"
+        android:summary="@string/pref_service_enabled_service"
+        android:defaultValue="false"
+        />
+    <ListPreference
+        android:key="@string/pref_location"
+        android:title="@string/pref_location_title"
+        android:summary="@string/pref_location_summary"
+        android:entryValues="@array/location_values"
+        android:entries="@array/locations"
+        android:defaultValue="0"
+        />
+</PreferenceScreen>

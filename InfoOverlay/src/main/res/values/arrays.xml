@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="locations">
+        <item>@string/location_top_left</item>
+        <item>@string/location_top_right</item>
+        <item>@string/location_bottom_left</item>
+        <item>@string/location_bottom_right</item>
+    </string-array>
+    <string-array name="location_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+</resources>
