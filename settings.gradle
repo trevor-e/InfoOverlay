@@ -1,1 +1,1 @@
-include ':InfoOverlay', 'SupportPreferenceFragment'
+include ':InfoOverlay'
