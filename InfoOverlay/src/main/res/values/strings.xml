@@ -15,5 +15,9 @@
     <string name="location_bottom_left">Bottom left</string>
     <string name="location_bottom_right">Bottom right</string>
     <string name="tag_preference_fragment">preference_fragment</string>
+    <string name="pref_color">pref_color</string>
+    <string name="pref_color_title">Text Color</string>
+    <string name="pref_color_summary">Choose the color of the text.</string>
+    <string name="pref_color_default">#ffffff</string>
 
 </resources>

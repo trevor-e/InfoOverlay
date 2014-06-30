@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Binder;
 import android.os.Bundle;
@@ -21,6 +22,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class OverlayService extends Service {
+
+    public static final String KEY_ENABLED = "enabled";
+    public static final String KEY_LOCATION = "location";
+    public static final String KEY_ACTIVITY = "activity";
+    public static final String KEY_COLOR = "color";
 
     /**
      * TextView that is overlayed on the screen
@@ -85,21 +91,50 @@ public class OverlayService extends Service {
 
         Bundle bundle = intent != null ? intent.getExtras() : null;
         if(bundle != null) {
-            boolean enabled = bundle.getBoolean("enabled");
-            if(enabled && !isRunning()) {
-                startMonitoring();
-            }
-            else if(!enabled && isRunning()) {
-                stopMonitoring();
-            }
-
-            String location = bundle.getString("location");
-            if(location != null && isRunning()) {
-                updateLocation(location);
-            }
+            processBundle(bundle);
         }
 
         return START_STICKY;
+    }
+
+    private void processBundle(Bundle bundle) {
+        String enabled = bundle.getString(KEY_ENABLED);
+        String location = bundle.getString(KEY_LOCATION);
+        String color = bundle.getString(KEY_COLOR);
+
+        if(enabled != null) {
+            if(enabled.equalsIgnoreCase("true") && !isRunning()) {
+                startMonitoring();
+            }
+            else if(enabled.equalsIgnoreCase("false") && isRunning()) {
+                stopMonitoring();
+            }
+        }
+
+        if(location != null && isRunning()) {
+            updateLocation(location);
+        }
+
+        if(color != null && isRunning()) {
+            updateColor(color);
+        }
+    }
+
+    private void updateColor(String color) {
+        if(displayText != null) {
+            int textColor;
+            if(!color.startsWith("#")) {
+                color = "#" + color;
+            }
+            try {
+                textColor = Color.parseColor(color);
+            }
+            catch (IllegalArgumentException e) {
+                textColor = 0;
+            }
+            displayText.setTextColor(textColor);
+            Log.d("trevor", color + " color set to " + textColor);
+        }
     }
 
     /**
@@ -157,6 +192,11 @@ public class OverlayService extends Service {
         return getGravity(preferenceValue);
     }
 
+    /**
+     * Gets the appropriate gravity value based on the preference selected.
+     * @param preferenceValue
+     * @return
+     */
     private int getGravity(String preferenceValue) {
         int retValue;
 
@@ -185,14 +225,15 @@ public class OverlayService extends Service {
      */
     private void startMonitoring() {
         //Create overlay
-        int gravity = getGravity();
         displayText = new TextView(this);
+        int gravity = getGravity();
         WindowManager.LayoutParams params = getLayoutParams(gravity);
         windowManager.addView(displayText, params);
+        updateColor(sharedPreferences.getString(getString(R.string.pref_color), "#fff"));
         isRunning = true;
 
         //Create background thread to get info
-        backgroundThread = new Thread() {
+        Runnable backgroundTask = new Runnable() {
             @Override
             public void run() {
                 while(isRunning) {
@@ -200,7 +241,7 @@ public class OverlayService extends Service {
                     if(!taskInfo.isEmpty()) {
                         Message message = new Message();
                         Bundle data = new Bundle();
-                        data.putString("activity", taskInfo.get(0).topActivity.getClassName());
+                        data.putString(KEY_ACTIVITY, taskInfo.get(0).topActivity.getClassName());
                         message.setData(data);
                         handler.sendMessage(message);
                     }
@@ -213,6 +254,7 @@ public class OverlayService extends Service {
                 }
             }
         };
+        backgroundThread = new Thread(backgroundTask);
 
         backgroundThread.start();
     }

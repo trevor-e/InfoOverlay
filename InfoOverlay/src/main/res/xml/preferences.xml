@@ -15,4 +15,9 @@
         android:entries="@array/locations"
         android:defaultValue="0"
         />
+    <EditTextPreference
+        android:key="@string/pref_color"
+        android:title="@string/pref_color_title"
+        android:summary="@string/pref_color_summary"
+        android:defaultValue="@string/pref_color_default"/>
 </PreferenceScreen>
